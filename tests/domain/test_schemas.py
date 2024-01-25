@@ -12,8 +12,9 @@ bankex: Instrument = Instrument(name="BANKEX", lot_size=15, expiry_dow=0)
 sensex: Instrument = Instrument(name="SENSEX", lot_size=10, expiry_dow=4)
 
 holidays: List[Holiday] = [
-    Holiday(date=date(year=2024, month=1, day=26)),
-    Holiday(date=date(year=2024, month=3, day=8)),
+    Holiday(date=date(year=2024, month=1, day=26), description="Republic Day"),
+    Holiday(date=date(year=2024, month=3, day=8), description="Mahashivratri"),
+    Holiday(date=date(year=2024, month=3, day=25), description="Holi"),
 ]
 nse: Exchange = Exchange(
     name="NSE", holidays=holidays, instruments=[midcpnifty, finnifty, banknifty, nifty]
@@ -101,6 +102,9 @@ def test_nse_expiring_instruments(
         (date(year=2024, month=1, day=30), [finnifty]),
         (date(year=2024, month=1, day=31), [banknifty]),
         (date(year=2024, month=3, day=7), [nifty, sensex]),
+        (date(year=2024, month=3, day=22), [midcpnifty, sensex, bankex]),
+        (date(year=2024, month=3, day=23), []),
+        (date(year=2024, month=3, day=24), []),
     ],
 )
 def test_market_expiring_instruments(
