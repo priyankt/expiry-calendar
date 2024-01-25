@@ -103,7 +103,9 @@ class Exchange(BaseModel):
         Returns:
             List of expiring instruments
         """
-        if not ignore_holiday and self.is_holiday(on_date=on_date):
+        if (
+            not ignore_holiday and self.is_holiday(on_date=on_date)
+        ) or on_date.weekday() > 4:
             return []
         expiring_instruments: List[Instrument] = list(
             filter(lambda x: x.is_expiring(on_date=on_date), self.instruments)
