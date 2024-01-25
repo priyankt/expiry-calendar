@@ -1,0 +1,12 @@
+{% macro get_suffix(date) %}
+
+{% set date_suffixs = ["th", "st", "nd", "rd"] %}
+{% set day = date.day %}
+
+{% if day % 10 in [1, 2, 3] and day not in [11, 12, 13] %}
+    {{date_suffixs[day % 10]}}
+{% else %}
+    {{date_suffixs[0]}}
+{% endif %}
+
+{% endmacro %}

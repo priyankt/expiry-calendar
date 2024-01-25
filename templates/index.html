@@ -1,0 +1,83 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Index Options Expiry Calendar: Today and Next 7 Days | Stay Informed on Key Expiration Dates
+{% endblock title %}
+
+{% block description %}
+Explore our comprehensive Index Options Expiry Calendar, providing up-to-date information on options expiring today and in the next 7 days.
+Stay ahead in the financial markets by tracking crucial expiration dates for a range of index options. Plan your strategies with precision and
+make informed decisions with our user-friendly and real-time expiry calendar.
+{% endblock description %}
+
+{% from 'macros/common.html' import get_suffix %}
+
+{%block content%}
+<div class="container max-w-screen-sm min-h-screen mx-auto bg-surface border border-outline-surface">
+    <!-- Title Section -->
+    <section class="p-6">
+        <h2 class="text-xl">
+            Options Expiry Calendar
+        </h2>
+        <h3 class="text-secondary tracking-wide">
+            Never miss an expiry trade again due to holiday.
+        </h3>
+    </section>
+    <hr class="h-[1px] mb-6 border-t-0 bg-outline-surface opacity-100 dark:opacity-50" />
+    <!-- List Section -->
+    <section class="grid sm:grid-cols-6 grid-cols-12 mb-8">
+        {% for expiry_section in expiry_sections %}
+            <div class="sm:col-start-2 sm:col-span-4 col-start-2 col-span-10">
+                {% set text_color = 'text-primary text-lg font-semibold' if expiry_section.is_selected else 'text-secondary text-lg opacity-75' %}
+                <!-- Date Label -->
+                <div class="indent-2 {{ text_color }} font-semibold">
+                    {% if expiry_section.is_selected %}
+                        <span class="text-base uppercase">
+                            Today
+                        </span>
+                        <span class="text-xs">&nbsp;•&nbsp;</span>
+                    {% endif %}
+                    <span class="text-sm opacity-75">
+                        {{ expiry_section.date.strftime('%a, %d %b %Y') }}
+                    </span>
+                </div>
+                <!-- List Item -->
+                {% set bg_color = 'bg-primary-container bg-opacity-50 shadow-md' if expiry_section.is_selected else 'bg-outline-surface bg-opacity-30' %}
+                {% set border_color = 'border-onprimary-container' if expiry_section.is_selected else 'border-outline' %}
+                <div class="mt-1">
+                    {% if expiry_section.instruments | length > 0 %}
+                        {% for instrument in expiry_section.instruments %}
+                            <div class="p-4 mb-4 rounded-md {{ text_color }} {{ bg_color }} border {{ border_color }} overflow-clip">
+                                <div class="text-lg font-semibold space-between-2">
+                                    <span>{{ instrument.name }}&nbsp;</span>
+                                    {% if not expiry_section.is_monthly_expiry(instrument) %}
+                                        <span class="leading-tight">
+                                            {{ expiry_section.date.strftime("%d") }}
+                                            <sup class="text-xs font-normal">
+                                                {{ get_suffix(expiry_section.date) }}
+                                            </sup>
+                                        &nbsp;</span>
+                                    {% endif %}
+                                    <span class="uppercase">{{ expiry_section.date.strftime("%b") }}</span>
+                                </div>
+                                <div class="">
+                                    <span class="text-base font-semibold">{{ instrument.lot_size }}</span>
+                                    <span class="text-sm opacity-70">lot size</span>
+                                    <span class="text-xs opacity-70">&nbsp;•&nbsp;</span>
+                                    <span class="text-sm opacity-70">{{ "monthly" if expiry_section.is_monthly_expiry(instrument) else "weekly" }}</span>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="p-4 mb-4 rounded-md {{ bg_color }} {{text_color}} border {{ border_color }} border-opacity-70 overflow-clip">
+                            <div class="text-lg font-semibold indent-0">
+                                <span>--</span>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </section>
+</div>
+{%endblock content%}

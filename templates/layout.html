@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <!-- Google tag (gtag.js) -->
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="Content-Type-Script" content="text/javascript" />
+    <meta name="Content-Type-Style" content="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimal-ui">
+    <meta name="ROBOTS" content="NOINDEX, NOFOLLOW" />
+    <meta name="revisit-after" content="7 days" />
+    <meta name="keywords" lang="en-us" content="options, expiry, calendar, nse, bse" />
+    <meta name="description" content="{% block description %}{{description}}{%endblock description%}" />
+
+    <title>{% block title %}{{ title }}{% endblock title %}</title>
+
+    <!-- CSS Files -->
+    <link href="{{ url_for('assets', path='/style.css').include_query_params(v=css_version) }}" rel="stylesheet">
+    {% block css %}{{ css }}{%endblock css%}
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&display=swap" rel="stylesheet">
+
+    {# block before_js %}{{ js }}{%endblock before_js%}
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    {% block after_js %}{{ js }}{%endblock after_js #}
+</head>
+
+<body class="font-sans">
+    {% block content %}{{content}}{% endblock content %}
+</body>
+
+</html>
