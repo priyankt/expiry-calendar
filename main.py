@@ -1,7 +1,8 @@
 import locale
 import time
 from typing import List
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
+from zoneinfo import ZoneInfo
 
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
@@ -26,7 +27,10 @@ locale.setlocale(category=locale.LC_ALL, locale=LOCALE_STR)
 
 
 @app.get(path="/", response_class=HTMLResponse)
-async def get_expiry_calendar(request: Request, today: date = date.today()):
+async def get_expiry_calendar(
+    request: Request,
+    today: date = datetime.now(tz=ZoneInfo(key="Asia/Calcutta")).date(),
+):
     market: Market = get_market()
     end_date: date = today + timedelta(days=7)
     expiry_sections: List[ExpirySection] = []
