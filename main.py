@@ -16,7 +16,7 @@ from src.ui.schemas import ExpirySection
 
 load_dotenv()
 
-from src.config import LOCALE_STR, logger
+from src.config import LOCALE_STR
 from src.lib.repos import get_market
 
 app = FastAPI()
@@ -49,4 +49,5 @@ async def get_expiry_calendar(
     return templates.TemplateResponse(
         name="index.html",
         context={"request": request, "expiry_sections": expiry_sections},
+        headers={"cache-control": "no-store"},
     )
