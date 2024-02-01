@@ -1,4 +1,5 @@
 from datetime import date, datetime
+from zoneinfo import ZoneInfo
 import pytest
 
 from src.lib.common import is_last_thursday_of_the_month, get_cache_expiry_seconds
@@ -20,7 +21,16 @@ def test_is_last_thursday_of_the_month(test_date: date, expected_result: bool) -
 @pytest.mark.parametrize(
     "test_now, secs",
     [
-        (datetime(year=2024, month=1, day=25, hour=23), 3600),
+        (
+            datetime(
+                year=2024,
+                month=1,
+                day=25,
+                hour=23,
+                tzinfo=ZoneInfo(key="Asia/Calcutta"),
+            ),
+            3600,
+        ),
         (datetime(year=2024, month=1, day=25, hour=15), 3600 * 9),
         (datetime(year=2024, month=1, day=25, hour=1), 3600 * 23),
         (datetime(year=2024, month=1, day=25, hour=8), 3600 * 16),

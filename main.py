@@ -49,10 +49,11 @@ async def get_expiry_calendar(
         is_selected = False
         today += timedelta(days=1)
 
+    cache_secs: int = get_cache_expiry_seconds(
+        now=datetime.now(tz=ZoneInfo(key="Asia/Calcutta"))
+    )
     return templates.TemplateResponse(
         name="index.html",
         context={"request": request, "expiry_sections": expiry_sections},
-        headers={
-            "cache-control": f"max-age={get_cache_expiry_seconds(now=datetime.now(tz=ZoneInfo(key="Asia/Calcutta")))}, public"
-        },
+        headers={"cache-control": f"max-age={cache_secs}, public"},
     )

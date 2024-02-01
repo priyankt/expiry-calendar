@@ -46,9 +46,7 @@ def is_last_wednesday_of_the_month(on_date: date) -> bool:
     return is_last_weekday_of_the_month(on_date=on_date, weekday=2)
 
 
-def get_cache_expiry_seconds(
-    now: datetime, tz: ZoneInfo = ZoneInfo(key="Asia/Calcutta")
-) -> int:
+def get_cache_expiry_seconds(now: datetime) -> int:
     """
     Get secs from now till end of day
 
