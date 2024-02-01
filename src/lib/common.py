@@ -1,4 +1,6 @@
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
+from zoneinfo import ZoneInfo
+import math
 
 
 def is_last_weekday_of_the_month(on_date: date, weekday: int) -> bool:
@@ -42,3 +44,21 @@ def is_last_wednesday_of_the_month(on_date: date) -> bool:
         True if on_date is last Wednesday of the month, False otherwise
     """
     return is_last_weekday_of_the_month(on_date=on_date, weekday=2)
+
+
+def get_cache_expiry_seconds(
+    now: datetime, tz: ZoneInfo = ZoneInfo(key="Asia/Calcutta")
+) -> int:
+    """
+    Get secs from now till end of day
+
+    Args:
+        now: datetime
+
+    Returns:
+        int
+    """
+    next_day: datetime = now + timedelta(days=1)
+    next_day = next_day.replace(hour=0, minute=0, second=0, microsecond=0)
+
+    return math.ceil((next_day - now).total_seconds())
