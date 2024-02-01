@@ -18,6 +18,7 @@ load_dotenv()
 
 from src.config import LOCALE_STR
 from src.lib.repos import get_market
+from src.lib.common import get_cache_expiry_seconds
 
 app = FastAPI()
 app.mount(path="/assets", app=StaticFiles(directory="assets"), name="assets")
@@ -51,5 +52,7 @@ async def get_expiry_calendar(
     return templates.TemplateResponse(
         name="index.html",
         context={"request": request, "expiry_sections": expiry_sections},
-        headers={"cache-control": "no-store"},
+        headers={
+            "cache-control": f"max-age={get_cache_expiry_seconds(now=datetime.now(tz=ZoneInfo(key="Asia/Calcutta")))}, public"
+        },
     )
