@@ -60,3 +60,16 @@ def get_cache_expiry_seconds(now: datetime) -> int:
     next_day = next_day.replace(hour=0, minute=0, second=0, microsecond=0)
 
     return math.ceil((next_day - now).total_seconds())
+
+
+def get_today() -> date:
+    """
+    Get today's date in Asia/Calcutta TZ
+
+    Args:
+        None
+
+    Returns:
+        datetime.date instance
+    """
+    return datetime.now(tz=ZoneInfo(key="Asia/Calcutta")).date()

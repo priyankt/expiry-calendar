@@ -1,60 +1,39 @@
-from typing import List
+from typing import List, cast
 from datetime import date
+
+from sqlalchemy.orm import Session
+from src.lib.models import Holiday as DBHoliday
+from src.lib.common import get_today
 
 from src.domain.schemas import Holiday, Market, Exchange, Instrument
 
 
-def fetch_holidays() -> List[Holiday]:
+def fetch_holidays(db: Session, current_date: date = get_today()) -> List[Holiday]:
     """
-    Returns holidays
+    Returns holidays from database
 
     Args:
-        none
+        db: Session
+        current_date: date (default: get_today())
 
     Returns:
         List of Holiday objects
     """
-    return [
-        Holiday(date=date(year=2024, month=1, day=22), description="Special Holiday"),
-        Holiday(date=date(year=2024, month=1, day=26), description="Republic Day"),
-        Holiday(date=date(year=2024, month=3, day=8), description="Mahashivratri"),
-        Holiday(date=date(year=2024, month=3, day=25), description="Holi"),
-        Holiday(date=date(year=2024, month=3, day=29), description="Good Friday"),
-        Holiday(
-            date=date(year=2024, month=4, day=11),
-            description="Id-Ul-Fitr (Ramadan Eid)",
-        ),
-        Holiday(
-            date=date(year=2024, month=4, day=14),
-            description="Dr. Baba Saheb Ambedkar Jayanti",
-        ),
-        Holiday(date=date(year=2024, month=4, day=17), description="Shri Ram Navmi"),
-        Holiday(
-            date=date(year=2024, month=4, day=21), description="Shri Mahavir Jayanti"
-        ),
-        Holiday(date=date(year=2024, month=5, day=1), description="Maharashtra Day"),
-        Holiday(date=date(year=2024, month=6, day=17), description="Bakri Id"),
-        Holiday(date=date(year=2024, month=7, day=17), description="Moharram"),
-        Holiday(date=date(year=2024, month=8, day=15), description="Independence Day"),
-        Holiday(date=date(year=2024, month=9, day=7), description="Ganesh Chaturthi"),
-        Holiday(
-            date=date(year=2024, month=10, day=2), description="Mahatma Gandhi Jayanti"
-        ),
-        Holiday(date=date(year=2024, month=10, day=12), description="Dussehra"),
-        Holiday(
-            date=date(year=2024, month=11, day=1), description="Diwali Laxmi Pujan"
-        ),
-        Holiday(
-            date=date(year=2024, month=11, day=2), description="Diwali-Balipratipada"
-        ),
-        Holiday(
-            date=date(year=2024, month=11, day=15), description="Gurunanak Jayanti"
-        ),
-        Holiday(date=date(year=2024, month=12, day=25), description="Christmas"),
-    ]
+    holidays: List[DBHoliday] = (
+        db.query(DBHoliday).filter(DBHoliday.date >= current_date).all()
+    )
+    return list(
+        map(
+            lambda x: Holiday(
+                date=cast(date, x.date),
+                description=cast(str, x.title),
+            ),
+            holidays,
+        )
+    )
 
 
-def get_nse() -> Exchange:
+def get_nse(db: Session) -> Exchange:
     """
     Returns NSE exchange object
 
@@ -66,7 +45,7 @@ def get_nse() -> Exchange:
     """
     return Exchange(
         name="NSE",
-        holidays=fetch_holidays(),
+        holidays=fetch_holidays(db=db),
         instruments=[
             Instrument(name="MIDCPNIFTY", lot_size=75, expiry_dow=0),
             Instrument(name="FINNIFTY", lot_size=40, expiry_dow=1),
@@ -76,7 +55,7 @@ def get_nse() -> Exchange:
     )
 
 
-def get_bse() -> Exchange:
+def get_bse(db: Session) -> Exchange:
     """
     Returns BSE exchange object
 
@@ -88,7 +67,7 @@ def get_bse() -> Exchange:
     """
     return Exchange(
         name="BSE",
-        holidays=fetch_holidays(),
+        holidays=fetch_holidays(db=db),
         instruments=[
             Instrument(name="BANKEX", lot_size=15, expiry_dow=0),
             Instrument(name="SENSEX", lot_size=10, expiry_dow=4),
@@ -96,7 +75,7 @@ def get_bse() -> Exchange:
     )
 
 
-def get_market() -> Market:
+def get_market(db: Session) -> Market:
     """
     Returns Market with multiple exchanges
 
@@ -106,4 +85,4 @@ def get_market() -> Market:
     Returns:
         Market Object
     """
-    return Market(exchanges=[get_nse(), get_bse()])
+    return Market(exchanges=[get_nse(db), get_bse(db)])

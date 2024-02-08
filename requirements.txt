@@ -4,3 +4,5 @@ jinja2
 requests
 python-dotenv
 pytest
+sqlalchemy
+psycopg2
