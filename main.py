@@ -26,7 +26,7 @@ from src.lib.database import SessionLocal
 app = FastAPI()
 app.mount(path="/assets", app=StaticFiles(directory="assets"), name="assets")
 templates = Jinja2Templates(directory="templates")
-templates.env.globals["css_version"] = time.time_ns()
+templates.env.globals["css_version"] = time.time_ns()  # type: ignore
 locale.setlocale(category=locale.LC_ALL, locale=LOCALE_STR)
 
 
