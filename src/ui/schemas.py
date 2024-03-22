@@ -26,7 +26,7 @@ class ExpirySection(BaseModel):
         # Bank Nifty monthly expiry on Thursdays and weekly expiries on
         # Wednesdays till 31st Mar, 2024
         if for_instrument.is_banknifty() and self.date < date(
-            year=2024, month=3, day=31
+            year=2024, month=3, day=1
         ):
             dow = for_instrument.expiry_dow + 1
 
