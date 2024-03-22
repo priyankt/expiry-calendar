@@ -56,10 +56,11 @@ def get_cache_expiry_seconds(now: datetime) -> int:
     Returns:
         int
     """
-    next_day: datetime = now + timedelta(days=1)
-    next_day = next_day.replace(hour=0, minute=0, second=0, microsecond=0)
+    # next_day: datetime = now + timedelta(days=1)
+    # next_day = next_day.replace(hour=0, minute=0, second=0, microsecond=0)
 
-    return math.ceil((next_day - now).total_seconds())
+    # return math.ceil((next_day - now).total_seconds())
+    return 900
 
 
 def get_today() -> date:
