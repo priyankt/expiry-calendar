@@ -51,7 +51,7 @@ class Instrument(BaseModel):
         """
         if not self.is_banknifty():
             return False
-        if on_date > date(year=2024, month=3, day=31):
+        if on_date > date(year=2024, month=3, day=1):
             return self.expiry_dow == on_date.weekday()
         # Instrument is banknifty before 31st Mar, 2024
         # & last thursday of the month
